@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Locação</title>
+  <style>
+    /* Estilos Gerais */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #111;
+      color: white;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #000;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .navbar span {
+      cursor: pointer;
+      color: white;
+      transition: color 0.3s;
+    }
+
+    .navbar span:hover {
+      color: #bf40bf;
+    }
+
+    /* Container Principal */
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Cards */
+    .metric-card {
+      background-color: #6a0dad;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .metric-card.pink {
+      background-color: #bf40bf;
+    }
+
+    .metric-card.big {
+      grid-column: span 2;
+    }
+
+    .metric-card h2 {
+      font-size: 48px;
+      margin: 10px 0;
+    }
+
+    .metric-card p {
+      font-size: 18px;
+    }
+
+    /* Gráfico */
+    .chart {
+      grid-column: span 2;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      justify-content: center;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .bar {
+      width: 40px;
+      background-color: orange;
+      transition: height 0.3s;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <span onclick="showDashboard()">Home</span>
+    <span>Cliente</span>
+    <span>Locação</span>
+    <span>Devolução</span>
+    <span onclick="loadCadastro()">Veículos</span>
+    <span>Manutenção</span>
+    <span>Relatórios</span>
+  </nav>
+
+  <!-- Conteúdo Dinâmico -->
+  <div id="content" class="dashboard-container">
+    <!-- Card 1 -->
+    <div class="metric-card">
+      <h2>80</h2>
+      <p>Locação / Dia</p>
+    </div>
+    <!-- Card 2 -->
+    <div class="metric-card pink">
+      <h2>08</h2>
+      <p>Manutenção</p>
+    </div>
+    <!-- Receita Card -->
+    <div class="metric-card big">
+      <h3>Receita / Dia</h3>
+      <h2>R$ 12.340,00</h2>
+    </div>
+    <!-- Gráfico -->
+    <div class="chart" id="chart"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Dados para o gráfico
+    const chartData = [40, 70, 50, 60, 80, 55, 65, 75];
+
+    // Seleciona o container do gráfico
+    const chartContainer = document.getElementById('chart');
+
+    // Cria as barras do gráfico
+    chartData.forEach(height => {
+      const bar = document.createElement('div');
+      bar.classList.add('bar');
+      bar.style.height = `${height}%`;
+      chartContainer.appendChild(bar);
+    });
+
+    // Função para carregar o conteúdo de "cadrastro.html"
+    function loadCadastro() {
+      fetch('cadrastro.html')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro ao carregar o formulário.');
+          }
+          return response.text();
+        })
+        .then(html => {
+          document.getElementById('content').innerHTML = html;
+        })
+        .catch(error => {
+          console.error(error);
+          document.getElementById('content').innerHTML = '<p>Erro ao carregar o formulário.</p>';
+        });
+    }
+
+    // Função para exibir o dashboard inicial
+    function showDashboard() {
+      document.getElementById('content').innerHTML = `
+        <div class="metric-card">
+          <h2>80</h2>
+          <p>Locação / Dia</p>
+        </div>
+        <div class="metric-card pink">
+          <h2>08</h2>
+          <p>Manutenção</p>
+        </div>
+        <div class="metric-card big">
+          <h3>Receita / Dia</h3>
+          <h2>R$ 12.340,00</h2>
+        </div>
+        <div class="chart" id="chart"></div>
+      `;
+      // Recria o gráfico
+      const chartContainer = document.getElementById('chart');
+      chartData.forEach(height => {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = `${height}%`;
+        chartContainer.appendChild(bar);
+      });
+    }
+  </script>
+</body>
+</html>

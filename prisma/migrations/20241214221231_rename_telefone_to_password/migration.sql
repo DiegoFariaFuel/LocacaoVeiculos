@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Cliente" ALTER COLUMN "password" DROP NOT NULL,
+ALTER COLUMN "password" DROP DEFAULT;
